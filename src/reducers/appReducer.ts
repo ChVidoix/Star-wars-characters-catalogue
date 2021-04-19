@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux'
 import { REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL, characterType, filmType } from '../actions/appActionTypes'
 
-interface appState {
+export interface appState {
     characters: characterType[],
     films: filmType[],
     isLoading: boolean,
@@ -11,7 +11,7 @@ interface appState {
 const initialState = {
     characters: [],
     films: [],
-    isLoading: true,
+    isLoading: false,
     error: false
 }
 
@@ -21,7 +21,7 @@ const appReducer = (state: appState = initialState, action: AnyAction): appState
             return { ...state, isLoading: true }
         }
         case LOAD_CHARACTERS: {
-            return { ...state, isLoading: false, characters: [...state.characters, ...action.payload] }
+            return { ...state, isLoading: false, characters: [...state.characters, ...action.payload.results] }
         }
         case LOAD_fILMS: {
             return { ...state, films: [...state.films, ...action.payload] }

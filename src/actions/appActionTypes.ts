@@ -8,11 +8,17 @@ export type characterType = {
     gender: string,
     birth_year: string,
     height: string,
-    films: string[]
+    films: string[],
+}
+
+export interface charactersPayload {
+    count: number,
+    results: characterType[]
 }
 
 export type filmType = {
-    title: string
+    title: string,
+    url: string
 }
 
 export interface requestCharacters {
@@ -21,7 +27,7 @@ export interface requestCharacters {
 
 export interface loadCharacters {
     type: typeof LOAD_CHARACTERS
-    payload: characterType[]
+    payload: charactersPayload
 }
 
 export interface loadFilms {

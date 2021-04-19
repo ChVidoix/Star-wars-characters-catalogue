@@ -1,6 +1,5 @@
-import { AnyAction } from "redux"
 import { Dispatch } from "redux"
-import { dispatchTypes, REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL } from './appActionTypes'
+import { dispatchTypes, REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL, charactersPayload } from './appActionTypes'
 import axios from 'axios'
 
 export const getCharacters = (page: number) => async (dispatch: Dispatch<dispatchTypes>) => {
@@ -11,9 +10,14 @@ export const getCharacters = (page: number) => async (dispatch: Dispatch<dispatc
 
         const response = await axios.get(`https://swapi.dev/api/people/?page=${page}`)
 
+        const data: charactersPayload = {
+            count: response.data.count,
+            results: response.data.results
+        }
+
         dispatch({
             type: LOAD_CHARACTERS,
-            payload: response.data.results
+            payload: data
         })
     } catch (e) {
         dispatch({
