@@ -6,19 +6,24 @@ import { getCharacters, getFilms } from './actions/appActions'
 import { appState } from './reducers/appReducer'
 import { v4 as uuidv4 } from 'uuid';
 import Character from './components/Character';
-import { Table, TableCell, TableContainer, TableHead, TableBody, TableRow, makeStyles, Paper, ThemeProvider, createMuiTheme } from '@material-ui/core'
+import { Table, TableCell, TableContainer, TableHead, TableBody, TableRow, makeStyles, Paper, ThemeProvider, createMuiTheme, Typography } from '@material-ui/core'
 import MainWrapper from './styled/MainWrapper'
+import CharacterDetails from './components/CharacterDetails'
+import { calculateAge } from './utils'
 
 const useStyles = makeStyles({
   root: {
     width: '90%',
     textAlign: 'center',
-    borderRadius: 15,
-    height: '90vh'
+    alignContent: 'center',
+    alignItems: 'center',
+    borderRadius: '15px',
+    margin: 'auto',
+    height: '80vh'
   },
   container: {
-    height: '90%',
-    borderRadius: 15,
+    height: '100%',
+    borderRadius: '15px',
     '&::-webkit-scrollbar': {
       width: '0.4em',
     },
@@ -32,8 +37,17 @@ const useStyles = makeStyles({
     },
     '&::-webkit-scrollbar-track-piece:start': {
       background: 'transparent',
-      marginTop: '10px'
+      marginTop: '15px'
+    },
+    '&::-webkit-scrollbar-track-piece:end': {
+      background: 'transparent',
+      marginBottom: '15px'
     }
+  },
+  header: {
+    textAlign: 'center',
+    color: 'white',
+    padding: '2vh'
   }
 })
 
@@ -50,9 +64,11 @@ const App: React.FC = () => {
   const dispatch: Dispatch<any> = useDispatch()
   const observer: React.MutableRefObject<any> = useRef()
   const charactersState: appState = useSelector((state: rootStore) => state.app)
-  const { characters, films, isLoading, error, charactersCount } = charactersState
+  const { characters, charactersCount, films, isLoading, error, selectedCharacter, modalOpened } = charactersState
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
+  const { name, birth_year, height } = selectedCharacter
+  const selectedFilms = selectedCharacter.films
   const lastCharacterRef: any = useCallback((node: Element) => {
     if (isLoading) return
     if (observer.current) observer.current.disconnect()
@@ -68,22 +84,24 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(getCharacters(page))
+    dispatch(getFilms())
     setPage(prev => prev + 1)
   }, [])
 
   return (
     <ThemeProvider theme={theme}>
       <MainWrapper>
+        <Typography variant="h2" className={classes.header}>
+          Star Wars Catalogue
+        </Typography>
         <Paper className={classes.root}>
           {characters && (
-
             <TableContainer className={classes.container}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>
-                      Name
-                  </TableCell>
+                    <TableCell />
+                    <TableCell>Name</TableCell>
                     <TableCell>Gender</TableCell>
                     <TableCell>Birth Year</TableCell>
                   </TableRow>
@@ -102,16 +120,19 @@ const App: React.FC = () => {
                   )}
                 </TableBody>
               </Table>
+              {isLoading && <Typography variant='body1'>Loading...</Typography>}
+              {!hasMore && <Typography variant='body1'>Nothing to load</Typography>}
             </TableContainer>
           )}
-          <div>
-            {isLoading && <p>Loading...</p>}
-          </div>
-          <div>
-            {!hasMore && <p>Nothing to load</p>}
-          </div>
         </Paper>
       </MainWrapper>
+      <CharacterDetails
+        name={name}
+        age={calculateAge(birth_year)}
+        height={+height}
+        films={selectedFilms}
+        open={modalOpened}
+      />
     </ThemeProvider>
   );
 }

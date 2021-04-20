@@ -2,6 +2,8 @@ export const REQUEST_CHARACTERS = "REQUEST_CHARACTERS"
 export const LOAD_CHARACTERS = "LOAD_CHARACTERS"
 export const LOAD_fILMS = "LOAD_fILMS"
 export const LOAD_fAIL = "LOAD_fAIL"
+export const OPEN_MODAL = "OPEN_MODAL"
+export const CLOSE_MODAL = "CLOSE_MODAL"
 
 export type characterType = {
     name: string,
@@ -16,9 +18,14 @@ export interface charactersPayload {
     results: characterType[]
 }
 
-export type filmType = {
+export type rawFilmType = {
     title: string,
     url: string
+}
+
+export type filmType = {
+    id: number,
+    title: string
 }
 
 export interface requestCharacters {
@@ -39,4 +46,12 @@ export interface loadFail {
     type: typeof LOAD_fAIL
 }
 
-export type dispatchTypes = requestCharacters | loadCharacters | loadFilms | loadFail
+export interface openModal {
+    type: typeof OPEN_MODAL
+}
+
+export interface closeModal {
+    type: typeof CLOSE_MODAL
+}
+
+export type dispatchTypes = requestCharacters | loadCharacters | loadFilms | loadFail | openModal | closeModal

@@ -1,12 +1,14 @@
 import { AnyAction } from 'redux'
-import { REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL, characterType, filmType } from '../actions/appActionTypes'
+import { REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL, OPEN_MODAL, CLOSE_MODAL, characterType, filmType } from '../actions/appActionTypes'
 
 export interface appState {
     characters: characterType[],
     films: filmType[],
     charactersCount: number,
     isLoading: boolean,
-    error: boolean
+    error: boolean,
+    modalOpened: boolean
+    selectedCharacter: characterType
 }
 
 const initialState = {
@@ -14,7 +16,15 @@ const initialState = {
     films: [],
     charactersCount: 0,
     isLoading: true,
-    error: false
+    error: false,
+    modalOpened: false,
+    selectedCharacter: {
+        name: "",
+        gender: "",
+        birth_year: "",
+        height: "string",
+        films: [],
+    }
 }
 
 const appReducer = (state: appState = initialState, action: AnyAction): appState => {
@@ -30,6 +40,12 @@ const appReducer = (state: appState = initialState, action: AnyAction): appState
         }
         case LOAD_fAIL: {
             return { ...state, isLoading: false, error: true }
+        }
+        case OPEN_MODAL: {
+            return { ...state, modalOpened: true, selectedCharacter: action.payload }
+        }
+        case CLOSE_MODAL: {
+            return { ...state, modalOpened: false }
         }
         default:
             return state

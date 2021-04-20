@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { dispatchTypes, REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL, charactersPayload } from './appActionTypes'
+import { dispatchTypes, REQUEST_CHARACTERS, LOAD_CHARACTERS, LOAD_fILMS, LOAD_fAIL, charactersPayload, filmType, rawFilmType } from './appActionTypes'
 import axios from 'axios'
 
 export const getCharacters = (pageNum: number) => async (dispatch: Dispatch<dispatchTypes>) => {
@@ -36,9 +36,18 @@ export const getFilms = () => async (dispatch: Dispatch<dispatchTypes>) => {
             method: 'GET',
             url: `https://swapi.dev/api/films/`
         }).then(response => {
+            const films: filmType[] = []
+            response.data.results.forEach((film: rawFilmType) => {
+                const id = +film.url.split('/')[5]
+
+                films.push({
+                    id,
+                    title: film.title
+                })
+            })
             dispatch({
                 type: LOAD_fILMS,
-                payload: response.data.results
+                payload: films
             })
         })
 
