@@ -1,5 +1,6 @@
 import React from 'react'
 import { TableRow, TableCell } from '@material-ui/core'
+import RootRef from '@material-ui/core/RootRef'
 
 interface propTypes {
     name: string,
@@ -13,13 +14,23 @@ const handleClick = (name: string) => {
     console.log(name);
 }
 
-const Character: React.FC<propTypes> = ({ name, gender, birth_year, height, films }) => {
+const Character = React.forwardRef((props: propTypes, ref: any) => {
     return (
-        <TableRow onClick={() => handleClick(name)}>
-            <TableCell>{name}</TableCell>
-            <TableCell>{gender !== "n/a" ? gender : "unknown"}</TableCell>
-            <TableCell>{birth_year}</TableCell>
-        </TableRow>
+        ref
+            ?
+            <RootRef rootRef={ref}>
+                <TableRow onClick={() => handleClick(props.name)}>
+                    <TableCell>{props.name}</TableCell>
+                    <TableCell>{props.gender !== "n/a" ? props.gender : "unknown"}</TableCell>
+                    <TableCell>{props.birth_year}</TableCell>
+                </TableRow>
+            </RootRef>
+            : <TableRow onClick={() => handleClick(props.name)}>
+                <TableCell>{props.name}</TableCell>
+                <TableCell>{props.gender !== "n/a" ? props.gender : "unknown"}</TableCell>
+                <TableCell>{props.birth_year}</TableCell>
+            </TableRow>
     )
-}
+})
+
 export default Character
