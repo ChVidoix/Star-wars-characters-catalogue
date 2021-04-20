@@ -9,7 +9,7 @@ import Character from './components/Character';
 import { Table, TableCell, TableContainer, TableHead, TableBody, TableRow, makeStyles, Paper, ThemeProvider, createMuiTheme, Typography } from '@material-ui/core'
 import MainWrapper from './styled/MainWrapper'
 import CharacterDetails from './components/CharacterDetails'
-import { calculateAge } from './utils'
+import { calculateAge, mapFilms } from './utils'
 
 const useStyles = makeStyles({
   root: {
@@ -115,7 +115,8 @@ const App: React.FC = () => {
                       gender={character.gender}
                       birth_year={character.birth_year}
                       height={+character.height}
-                      films={character.films}
+                      characterFilms={character.films}
+                      films={films}
                     />)
                   )}
                 </TableBody>
