@@ -1,3 +1,13 @@
+# Star Wars Characters Catalogue
+
+Is a project written as a recruitment task for Virtus Lab. It's a website fetching and displaying data describing characters appearing in Star Wars. 
+
+## Running a project on your local machine
+
+`1.` Run `npm install` to install all required packages.
+
+`2.` Run `npm start` to run the app in development mode.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
